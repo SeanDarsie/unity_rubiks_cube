@@ -44,7 +44,7 @@ public class UICubeCreator : MonoBehaviour {
 		showCubeSize.text = slider.value.ToString();
 	}
 
-	void DestroyAllCubes()
+	public void DestroyAllCubes()
 	{
 		CubePiece[] allLitteCubes = FindObjectsOfType<CubePiece>();
 		foreach(CubePiece x in allLitteCubes)

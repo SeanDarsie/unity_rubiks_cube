@@ -6,6 +6,7 @@ public class CubePiece : MonoBehaviour {
 	public List<Transform> XRow = new List<Transform>();
 	public List<Transform> YRow = new List<Transform>();
 	public List<Transform> ZRow = new List<Transform>();
+	public string pieceColor;
 	public int size;
 	enum Dir{x,y,z};
 	[SerializeField] Dir myDir = Dir.x;
@@ -27,7 +28,10 @@ public class CubePiece : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		// if (Input.GetKeyDown(KeyCode.S))
+		// {
+		// 	Debug.Log(transform.position.ToString());
+		// }
 	}
 	/// <summary>
 	/// OnMouseDown is called when the user has pressed the mouse button while
@@ -75,12 +79,15 @@ public class CubePiece : MonoBehaviour {
 		{
 			case Dir.x:
 				cubeControlx.RemakeListOfKids(XRow);
+				cubeControlx.column = transform.position.x;
 				break;
 			case Dir.y:
 				cubeControly.RemakeListOfKids(YRow);
+				cubeControly.column = transform.position.y;
 				break;
 			case Dir.z:
 				cubeControlz.RemakeListOfKids(ZRow);
+				cubeControlz.column = transform.position.z;
 				break;
 			default:
 				cubeControlx.RemakeListOfKids(XRow);

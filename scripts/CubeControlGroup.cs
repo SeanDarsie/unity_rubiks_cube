@@ -9,13 +9,13 @@ public class CubeControlGroup : MonoBehaviour {
 	public Direction direction;
 	Vector3 previousMousePos = new Vector3();
 	[SerializeField] Transform cubeParent;
-
+	[HideInInspector] public float column;
+	Moves moves;
 	/// <Debuggery>
-	[SerializeField] Transform rotationVisualizer;
 
 	// Use this for initialization
 	void Start () {
-		
+		moves = FindObjectOfType<Moves>();
 	}
 	
 	// Update is called once per frame
@@ -76,42 +76,51 @@ public class CubeControlGroup : MonoBehaviour {
 	}
 	public void AlignToClosestDir()
 	{
+		// control group has direction and angle. now it also needs the specific x val.
 		float angle = ClosestAngle();
 		// angle *= (Mathf.PI/ 180);
-		Debug.Log("Angle: " + angle);
+		// Debug.Log("Angle: " + angle);
 		switch (direction)
 		{
 			case Direction.X:
+			
 				switch((int)angle)
 				{
+					
 					case 0: // problem case
 						if (transform.eulerAngles.y == 0)
 						{
+							moves.AddToMovesList("x",column,0);
 							Quaternion rot = Quaternion.LookRotation((transform.position + (new Vector3(0,0,1))) - transform.position, Vector3.up);
 							transform.rotation = rot;
 						}
 						else
 						{
+							moves.AddToMovesList("x",column,180);
 							Quaternion rot = Quaternion.LookRotation((transform.position + (new Vector3(0,0,-1))) - transform.position, Vector3.down);
 							transform.rotation = rot;
 						}
 						break;
 					case 90:
+							moves.AddToMovesList("x",column,90);
 							Quaternion rot90 = Quaternion.LookRotation((transform.position + (new Vector3(0,-1,0))) - transform.position, Vector3.up);
 							transform.rotation = rot90;
 						break;
 					case 270:
+						moves.AddToMovesList("x",column,270);
 						Quaternion rot270 = Quaternion.LookRotation((transform.position + (new Vector3(0,1,0))) - transform.position, Vector3.up);
 						transform.rotation = rot270;
 						break;
 					case 360: // problem case this is a 180 case
 						if (transform.eulerAngles.y == 0)
 						{
+							moves.AddToMovesList("x",column,0);
 							Quaternion rot = Quaternion.LookRotation((transform.position + (new Vector3(0,0,1))) - transform.position, Vector3.up);
 							transform.rotation = rot;
 						}
 						else
 						{
+							moves.AddToMovesList("x",column,180);
 							Quaternion rot = Quaternion.LookRotation((transform.position + (new Vector3(0,0,-1))) - transform.position, Vector3.down);
 							transform.rotation = rot;
 						}
@@ -132,6 +141,7 @@ public class CubeControlGroup : MonoBehaviour {
 				
 				break;
 			case Direction.Y:
+			moves.AddToMovesList("y",column,angle);
 				switch((int)angle)
 				{
 					case 0:
@@ -163,6 +173,7 @@ public class CubeControlGroup : MonoBehaviour {
 				// rotationVisualizer.rotation = new Quaternion(0,angle,0,transform.rotation.w);
 				break;
 			case Direction.Z:
+			moves.AddToMovesList("z",column,angle);
 				switch((int)angle)
 				{
 					case 0:
@@ -200,6 +211,7 @@ public class CubeControlGroup : MonoBehaviour {
 			transform.GetChild(i).GetComponent<CubePiece>().UnHighlight();
 		}
 		RemoveChildren();
+		// transform.rotation = Quaternion.identity;
 		// for (int i = 0; i < transform.childCount; i++)
 		// {
 		// 	transform.GetChild(i).GetComponent<CubePiece>().UnHighlight();
@@ -212,11 +224,6 @@ public class CubeControlGroup : MonoBehaviour {
 		switch(direction)
 		{
 			case Direction.X:
-			
-				// Debug.Log("rotation.x Degree: " + transform.rotation.x *( 180f/Mathf.PI));
-				// Debug.Log("rotation.x Radians:" + transform.rotation.ToString());
-				Debug.Log("rotation.x Eulers: " + transform.eulerAngles.ToString());
-				
 				transform.Rotate(transform.right * go);
 				break;
 			case Direction.Y:
